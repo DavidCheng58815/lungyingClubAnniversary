@@ -360,7 +360,7 @@ html, body { margin: 0; min-height: 100%; background: #050403; color: #2a170b; f
   border-radius: 20px;
   padding-left: 10px;
   box-sizing: border-box;
-  width: 32%;   /* 寬度永遠只佔父層的一半 */
+  width: 34%;   /* 寬度永遠只佔父層的一半 */
   height: 50%; /* 高度自動根據裡面的內容撐開（最推薦的做法） */
 
   /*
