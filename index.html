@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>龍穎部落・遠征軍集結令｜座位查詢</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="page-shell">
+    <section class="stage" id="stage">
+      <img class="bg" src="assets/background.png" alt="龍穎部落座位查詢背景" />
+
+      <section class="map-layer" id="mapLayer" aria-label="戰略座位圖"></section>
+
+      <section class="search-panel" aria-label="搜尋席位">
+        <div class="search-title">尋找你的席位</div>
+
+        <div class="search-row">
+         <input
+           id="searchInput"
+           class="search-input"
+           type="search"
+          placeholder="姓名 / 社名 / 桌名"
+           autocomplete="off"
+         />
+         <button id="searchBtn" class="search-button">搜尋</button>
+      </div>
+
+     <p class="search-hint">點擊搜尋結果，即可查看該桌名冊。</p>
+
+     <div id="tableList" class="table-list"></div>
+
+    <div class="quick-actions">
+    <button id="showRosterBtn" type="button">名冊</button>
+    <button id="showAllBtn" type="button">顯示全部</button>
+   </div>
+</section>
+
+      <section class="info-panel" id="infoPanel" aria-live="polite"></section>
+      <!-- 背景圖下方控制列：透明功能層 -->
+      <div class="bg-control-layer">
+       <!-- 蓋在背景圖「返回戰略地圖」按鈕上的透明按鈕 -->
+          <button id="backToMapBtn" class="invisible-back-btn" type="button" aria-label="返回戰略地圖">
+              返回戰略地圖
+          </button>
+
+           <!-- 顯示目前選到的桌次文字，蓋在背景圖「請選擇桌次」的位置 -->
+          <div id="selectedTableText" class="selected-table-text">
+                 請選擇桌次
+         </div>
+
+           <!-- 蓋在背景圖「請選擇桌次」下拉框上的透明選單 -->
+         <select id="tableSelect" class="invisible-table-select" aria-label="查看桌次">
+    <option value="">請選擇桌次</option>
+  </select>
+</div>
+    </section>
+  </main>
+
+  <script src="data.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

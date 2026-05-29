@@ -1,0 +1,407 @@
+/*.search-panel      = 整個左側搜尋區的位置與大小
+.search-title      = 「尋找你的席位」
+.search-row        = 搜尋框＋搜尋按鈕那一排
+.search-input      = 輸入框
+.search-button     = 搜尋按鈕
+.search-hint       = 提示文字
+.table-list        = 可上下滑動的桌次清單
+.table-card        = 每一桌的小卡片
+.table-card-title  = 桌號＋桌名
+.table-card-meta   = 人數＋代表姓名
+.quick-actions     = 底部兩顆按鈕的位置
+*/
+* { box-sizing: border-box; }
+:root {
+  --gold: #f1c86c;
+  --gold-2: #b88632;
+  --dark: #0b0704;
+  --paper: rgba(236, 203, 140, 0.88);
+  --red: #7a160d;
+}
+html, body { margin: 0; min-height: 100%; background: #050403; color: #2a170b; font-family: "Times New Roman", "DFKai-SB", "標楷體", "KaiTi", "STKaiti", serif;} /*字型改變*/
+.page-shell { width: 100%; min-height: 100vh; display: flex; justify-content: center; align-items: flex-start; padding: 0; background: radial-gradient(circle at top, #25160a 0%, #040302 65%); }
+.stage { position: relative; width: min(100vw, 1023px); aspect-ratio: 1023 / 1537; overflow: hidden; box-shadow: 0 0 38px rgba(0,0,0,.9); }
+.bg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; user-select: none; -webkit-user-drag: none; }
+.map-layer { position: absolute; left: 5.7%; top: 27.9%; width: 88.4%; height: 42.5%; }
+.table-token { position: absolute; transform: translate(-50%, -50%); border: 0; background: transparent; padding: 0; cursor: pointer; filter: drop-shadow(0 7px 7px rgba(0,0,0,.72)); transition: transform .15s ease, filter .15s ease; }
+.table-token:hover, .table-token.active { transform: translate(-50%, -50%) scale(1.08); filter: drop-shadow(0 0 14px rgba(244, 190, 82, .95)); z-index: 5; }
+.table-token.main { width: 8.5%; }
+.table-token.normal { width: 6.2%; }
+.table-token img { width: 100%; display: block; pointer-events: none; }
+.table-number { position: absolute; left: 50%; top: 47%; transform: translate(-50%, -50%); width: 58%; height: 38%; display: flex; align-items: center; justify-content: center; color: #f9d784; font-size: clamp(9px, 1.6vw, 19px); font-weight: 900; text-shadow: 0 2px 3px #000, 0 0 9px #000; pointer-events: none; }
+.table-token.main .table-number { top: 48%; font-size: clamp(10px, 2.1vw, 25px); }
+
+.search-panel {
+  position: absolute;
+  left: 4.5%;
+  top: 64.5%;/*距離版面的高度越小越高*/
+  width: 30%;
+  height: 30%;
+  padding: 2.2% 2.4% 2%;
+  box-sizing: border-box;
+  overflow: hidden;
+  color: #2b1909;
+  }
+  /* 左側搜尋區字體設定 */
+.search-panel,
+.search-panel input,
+.search-panel button,
+.search-panel div,
+.search-panel p {
+  font-family: "Times New Roman", "DFKai-SB", "標楷體", "KaiTi", "STKaiti", serif;
+  
+}
+
+.search-title {
+  margin: 0 0 3%;
+  text-align: center;
+  font-size: clamp(14px, 1.55vw, 20px);
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  color: #261407;
+  text-shadow: 0 1px 0 rgba(255, 230, 170, 0.7);
+}
+
+.search-row {
+  display: grid;
+  grid-template-columns: 1fr 64px;
+  gap: 7px;
+  margin-bottom: 2.8%;
+}
+
+.search-input {
+  width: 100%;
+  height: clamp(28px, 3.1vw, 36px);
+  padding: 0 8px;
+  box-sizing: border-box;
+  border: 2px solid #5a2b15;
+  border-radius: 3px;
+  background: rgba(246, 229, 177, 0.72);
+  color: #2b1708;
+  font-size: clamp(10px, 1vw, 13px);
+  font-weight: 800;
+  outline: none;
+}
+
+.search-input::placeholder {
+  color: rgba(42, 27, 12, 0.58);
+}
+
+.search-button {
+  height: clamp(28px, 3.1vw, 36px);
+  border: 2px solid #c89b4d;
+  border-radius: 6px;
+  background: linear-gradient(180deg, #7b2118 0%, #3a0e09 100%);
+  color: #f8d982;
+  font-size: clamp(10px, 1.05vw, 14px);
+   font-family: "Times New Roman", "DFKai-SB", "標楷體", "KaiTi", "STKaiti", serif;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+}
+
+.search-hint {
+  margin: 0 0 2.8%;
+  font-size: clamp(9px, 0.85vw, 11px);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  line-height: 1.25;
+  color: rgba(65, 38, 14, 0.72);
+}
+
+.table-list {
+  height: 60%;
+  overflow-y: auto;
+  padding-right: 5px;
+  scrollbar-color: #8b4a1b rgba(40, 22, 8, 0.15);
+   font-family: "Times New Roman", "DFKai-SB", "標楷體", "KaiTi", "STKaiti", serif;
+}
+
+.table-card {
+  display: grid;
+  grid-template-columns: 1fr 14px;
+  align-items: center;
+   /* 讓每張桌卡等寬 */
+  width: 100%;
+  box-sizing: border-box;
+
+  min-height: 34px;
+  margin-bottom: 6px;
+  padding: 5px 7px;
+  border: 1px solid rgba(70, 42, 18, 0.72);
+  border-radius: 6px;
+  background: rgba(225, 211, 164, 0.78);
+  cursor: pointer;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.12);
+  text-align: left;
+}
+
+.table-card-title {
+  font-size: clamp(10px, 1.05vw, 14px);
+  font-weight: 900;
+  color: #211104;
+  line-height: 1.15;
+}
+
+.table-card-meta {
+  margin-top: 2px;
+  font-size: clamp(8px, 0.85vw, 11px);
+  font-weight: 700;
+  color: rgba(49, 29, 10, 0.78);
+  line-height: 1.15;
+}
+
+.table-card-arrow {
+  font-size: 20px;
+  font-weight: 900;
+  color: #6d3b18;
+  text-align: right;
+}
+
+.quick-actions {
+  position: absolute;
+  left: 5%;
+  right: 8%;
+  bottom: 5%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.quick-actions button {
+  height: clamp(28px, 3.1vw, 36px);
+  border: 2px solid #c89b4d;
+  border-radius: 6px;
+  background: linear-gradient(180deg, #7b2118 0%, #3a0e09 100%);
+  color: #f8d982;
+  font-size: clamp(10px, 1vw, 14px);
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  cursor: pointer;
+}
+
+.quick-actions button:hover {
+  filter: brightness(1.12);
+}
+/*.search-panel { position: absolute; left: 6.5%; top: 66.5%; width: 27.5%; height: 24.7%; padding: 4.2% 3.2% 2.2%; }*/
+/*.panel-title { color: #3b1d0a; font-size: clamp(16px, 2.6vw, 24px); font-weight: 900; letter-spacing: .08em; margin-bottom: 8%; text-shadow: 0 1px 0 rgba(255,236,178,.8); }*/
+/*.search-input { width: 100%; height: clamp(34px, 4.3vw, 48px); border: 2px solid #4e2b11; border-radius: 4px; background: rgba(246, 222, 162, .78); color: #2b1608; padding: 0 12px; font-size: clamp(12px, 1.65vw, 16px); outline: none; box-shadow: inset 0 2px 4px rgba(0,0,0,.22); }
+.search-input:focus { border-color: #8b4d18; box-shadow: 0 0 0 2px rgba(222, 174, 80, .25), inset 0 2px 4px rgba(0,0,0,.18); }
+.search-actions { display: flex; gap: 8px; margin-top: 7%; }
+.primary-btn, .ghost-btn { min-height: 34px; border-radius: 4px; border: 1px solid #3b1a08; font-weight: 800; cursor: pointer; letter-spacing: .08em; }
+.primary-btn { flex: 1; color: var(--gold); background: linear-gradient(#4a170b, #140805); box-shadow: inset 0 0 0 1px rgba(255,205,82,.2), 0 2px 4px rgba(0,0,0,.45); }
+.ghost-btn { width: 35%; color: #3c210d; background: rgba(215, 169, 88, .45); }
+.hint { margin-top: 8%; line-height: 1.55; font-size: clamp(10px, 1.45vw, 13px); color: #5a3516; font-weight: 700; }*/
+.info-panel { position: absolute; left: 39.1%; top: 68.7%; width: 52.7%; height: 19.2%; padding: 2.1% 2.2%; overflow-y: auto;overflow-x: hidden; scrollbar-color: #7a3a12 rgba(0,0,0,.1); }
+.info-card h2 { margin: 0 0 10px; color: #4d210c; font-size: clamp(18px, 2.7vw, 28px); letter-spacing: .05em; text-shadow: 0 1px 0 rgba(255,231,172,.8); }
+.info-card .sub { margin: 0 0 12px; color: #6b320d; font-weight: 800; }
+/* 綠色框：名冊卡片本身 */
+.info-card.roster-card {
+  height: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+/* 綠色框：只有表格內容可以捲動 */
+.roster-scroll {
+  height: 68%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+  border: 1px solid rgba(92, 55, 24, 0.25);
+}
+
+/* 名冊表格 */
+.roster-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+/* 固定表頭，避免資料列滑到表頭上方 */
+.roster-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: #7b2118;
+  color: #f8d982;
+  text-align: center;
+  vertical-align: middle;
+  padding: 8px 6px;
+  line-height: 1.2;
+}
+
+/* 表格每一格：整行置中 */
+.roster-table th,
+.roster-table td {
+  text-align: center;
+  vertical-align: middle;
+}
+
+/* 表格內容列 */
+.roster-table tbody td {
+  background: rgba(230, 203, 139, 0.55);
+  padding: 8px 6px;
+  line-height: 1.25;
+  min-height: 42px;
+  border-bottom: 1px solid rgba(92, 55, 24, 0.18);
+}
+
+/* 桌名欄如果太長，允許換行，但仍然置中 */
+.roster-table td:nth-child(2) {
+  word-break: keep-all;
+  white-space: normal;
+}
+
+/* 查看按鈕置中 */
+.roster-table .mini-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 48px;
+  height: 30px;
+  margin: 0 auto;
+}
+.info-table { width: 100%; border-collapse: collapse; font-size: clamp(11px, 1.42vw, 15px); background: rgba(255, 230, 172, .34); }
+.info-table th, .info-table td { border-bottom: 1px solid rgba(83, 43, 14, .26); padding: 6px 7px; text-align: left; vertical-align: top; }
+.info-table th { position: sticky; top: 0; background: rgba(111, 40, 15, .9); color: #f9d784; font-weight: 900; z-index: 1; }
+.result-item { display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: center; padding: 8px 0; border-bottom: 1px solid rgba(82, 38, 9, .25); }
+.result-title { font-weight: 900; color: #3d1d0b; }
+.result-meta { font-size: .92em; color: #693510; margin-top: 3px; }
+.mini-btn { border: 1px solid #4a1b08; background: linear-gradient(#5b1b0d,#1e0a05); color: #f7cf72; border-radius: 4px; padding: 6px 10px; cursor: pointer; font-weight: 800; white-space: nowrap; }
+.empty { font-weight: 900; color: #5a2a0d; padding-top: 8px; }
+@media (max-width: 680px) {
+  .stage { width: 100vw; min-width: 360px; }
+  .table-token.main { width: 8.5%; }
+  .table-token.normal { width: 6.2%; }
+  .search-panel { padding-top: 5%; }
+  .hint { display: none; }
+  .search-actions { margin-top: 5%; }
+  .info-panel { padding-top: 2.5%; }
+  .info-table th:nth-child(2), .info-table td:nth-child(2), .info-table th:nth-child(4), .info-table td:nth-child(4) { display: none; }
+}
+/* =========================================================
+   綠色框下方背景圖控制列：透明功能層
+   目的：保留背景圖原本視覺，只疊上可點擊功能
+========================================================= */
+
+/* 整組透明功能層：對準背景圖下方的「返回戰略地圖 / 查看桌次」那一排 */
+.bg-control-layer {
+  position: absolute;
+
+  /*
+    這四個數字是最需要微調的地方：
+    left：整組往右或往左
+    top：整組往上或往下
+    width：整組寬度
+    height：整組高度
+  */
+  left: 41.8%;
+  top: 90.7%;
+  width: 48.5%;
+  height: 4.4%;
+
+  box-sizing: border-box;
+
+  /*
+    預設不攔截滑鼠事件，
+    只有裡面的 button / select 可以點
+  */
+  pointer-events: none;
+}
+
+/* 透明按鈕：蓋在背景圖的「返回戰略地圖」上 */
+.invisible-back-btn {
+  position: absolute;
+
+  /*
+    這裡是相對於 .bg-control-layer 的位置
+    如果點擊範圍沒有對準「返回戰略地圖」，就調這裡
+  */
+  left: 0%;
+  top: 0%;
+  width: 25%;
+  height: 100%;
+
+  border: none;
+  background: transparent;
+  color: transparent;
+
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+/* 選到桌次後顯示的金色文字 */
+.selected-table-text {
+  position: absolute;
+
+  /*
+    對準背景圖「請選擇桌次」文字的位置
+    如果文字沒有蓋準，就調 left / top / width / height
+  */
+  left: 67%;
+  top: 10%;
+  width: 34%;
+  height: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+
+  color: #f8d982;
+  font-family: "Times New Roman", "DFKai-SB", "微軟正黑體", "KaiTi", "STKaiti", serif;
+  font-size: clamp(11px, 1.05vw, 17px);
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-shadow: 0 2px 3px #000, 0 0 8px rgba(255, 190, 60, 0.35);
+  /* 只有這一塊有暗棕色背景  */
+   background: rgba(24, 14, 6, 0.58);
+  border: none;
+  border-radius: 20px;
+  padding-left: 10px;
+  box-sizing: border-box;
+  width: 25%;   /* 寬度永遠只佔父層的一半 */
+  height: 50%; /* 高度自動根據裡面的內容撐開（最推薦的做法） */
+
+  /*
+    這行很重要：
+    讓滑鼠可以穿透文字，點到下面的 select
+  */
+  pointer-events: none;
+}
+
+/* 透明下拉選單：蓋在背景圖「請選擇桌次」下拉框上 */
+.invisible-table-select {
+  position: absolute;
+
+  /*
+    對準背景圖的下拉框位置
+    如果點擊範圍沒對準，就調這裡
+  */
+  left: 60%;
+  top: 0%;
+  width: 40%;
+  height: 100%;
+
+  border: none;
+  background: rgba(0, 0, 0, 0.01);
+
+  /*
+    平常幾乎看不見 select 的字，
+    視覺主要交給背景圖與 selectedTableText
+  */
+  color: rgba(248, 217, 130, 0.01);
+
+  cursor: pointer;
+  outline: none;
+  pointer-events: auto;
+
+  font-family: "Times New Roman", "DFKai-SB", "標楷體", "KaiTi", "STKaiti", serif;
+}
+
+/* 下拉選單打開後的選項樣式 */
+.invisible-table-select option {
+  color: #f8d982;
+  background: #1b1007;
+  font-family: "Times New Roman", "DFKai-SB", "標楷體", "KaiTi", "STKaiti", serif;
+}
